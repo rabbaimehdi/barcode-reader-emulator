@@ -6,16 +6,17 @@ A standalone Windows desktop app. Emulates a barcode reader device (which behave
 
 ## Usage
 
-- Download the executable in the latest [release](https://github.com/oxcafedead/barcode-reader-emulator/releases). 
+- Download the executable in the latest [release](https://github.com/rabbaimehdi/barcode-reader-emulator/releases). 
 - Run it.
 - Optionally, you can change the settings.
     - To change a hotkey combination, just click on the "Change" button near Hotkey field. Select keys for the new combination (multi-selection is supported for special keys). Keep in mind that some combinations are already bind in the system and cannot be used.
     - You can also parse an existing barcode on the screen by clicking on the "Scan from the screen" button. The screen will be automatically parsed and set to the "Value" field.
 - Just go to the target place (standalone app, browser tab or any other) which you are going to test with a barcode input.
 - Press the hotkey.
+- For multiscans (simulating successives barcode scans) use a semicolon ; between codes, the slider "scan delay" can be adjusted to define the time between scans. 
 
 ## Screenshot
-![Screenshot](docs/screenshot.jpg)
+![Screenshot](docs/screenshot.png)
 
 ## Known issues/limitations
 
@@ -32,8 +33,7 @@ Also, the _US keyboard layout_ should be used (switch to it in the settings).
 
 Only Windows operating system is supported for now.
 
-## Support
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/vozhdaenko)
+
 
 ## Build
 First, install Go.
