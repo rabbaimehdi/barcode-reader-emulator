@@ -12,8 +12,11 @@ func main() {
 	var value *walk.TextEdit
 	var hotkeyLabel *walk.Label
 	var slider *walk.Slider
+	var slider2 *walk.Slider
 	var mainWnd *walk.MainWindow
 	var sendEnter *walk.CheckBox
+
+	
 
 	defaultBinding, err := SetNewBinding([]int{0, 1}, 10)
 	if err != nil {
@@ -62,6 +65,7 @@ func main() {
 				// Call EmulateTyping for the current segment. The slider value
 				// and sendEnter state are applied consistently for each sequence.
 				EmulateTyping(segment, slider.Value(), sendEnter.CheckState() == walk.CheckChecked)
+				time.Sleep(time.Millisecond * time.Duration(slider2.Value())) // Delay between segments
 			}
 		})
 	}() // Listen in background, non-blocking the main GUI thread
@@ -163,7 +167,15 @@ func main() {
 						Text: "Send ENTER at the end", 
 						AssignTo: &sendEnter,
 						MinSize: Size{Width: 40, Height: 20},
+						Checked: true,
+						
 					},		
+				},
+			},
+			HSplitter{
+				Children: []Widget{
+					Label{Text: "Scan Delay"},
+					Slider{AssignTo: &slider2, MinValue: 0, MaxValue: 1000, Value: 500},	
 				},
 			},
 		},
