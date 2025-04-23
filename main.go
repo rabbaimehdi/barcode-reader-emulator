@@ -2,7 +2,7 @@ package main
 
 import (
 	"time"
-
+	"strings"	
 	"github.com/gen2brain/beeep"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
@@ -20,19 +20,51 @@ func main() {
 		walk.MsgBox(nil, "Failed to bind a default hotkey", err.Error()+"\nTry to change the hotkey to something another", walk.MsgBoxApplModal)
 	}
 
+	// go func() {
+	// 	ListenForHotkey(func() {
+	// 		time.Sleep(time.Millisecond * 150)
+
+	// 		valueToWrite := value.Text()
+	// 		if len(valueToWrite) == 0 {
+	// 			return
+	// 		}
+	// 		beeep.Beep(beeep.DefaultFreq*2, beeep.DefaultDuration/4) // emulate scanner sound :)
+			
+	// 		EmulateTyping(valueToWrite, slider.Value(), sendEnter.CheckState() == walk.CheckChecked)
+	// 	})
+	// }() // listen in bg, non-blocking the main GUI thread
+	
 	go func() {
 		ListenForHotkey(func() {
-			time.Sleep(time.Millisecond * 150)
-
-			valueToWrite := value.Text()
-			if len(valueToWrite) == 0 {
+			// Give a brief pause before processing
+			time.Sleep(150 * time.Millisecond)
+	
+			rawValue := value.Text()
+			if len(rawValue) == 0 {
 				return
 			}
-			beeep.Beep(beeep.DefaultFreq*2, beeep.DefaultDuration/4) // emulate scanner sound :)
-
-			EmulateTyping(valueToWrite, slider.Value(), sendEnter.CheckState() == walk.CheckChecked)
+	
+			// Split the input by semicolons so we can simulate typing for each segment
+			segments := strings.Split(rawValue, ";")
+			firstSegment := true
+			for _, segment := range segments {
+				// Trim each segment to remove any extra whitespace
+				segment = strings.TrimSpace(segment)
+				if len(segment) == 0 {
+					continue
+				}
+				// Emit a beep to emulate the scanner sound for each segment
+				if firstSegment {
+					beeep.Beep(beeep.DefaultFreq*2, beeep.DefaultDuration/4) // Beep only for the first segment
+					firstSegment = false // Set flag to false after the first beep
+				}
+				
+				// Call EmulateTyping for the current segment. The slider value
+				// and sendEnter state are applied consistently for each sequence.
+				EmulateTyping(segment, slider.Value(), sendEnter.CheckState() == walk.CheckChecked)
+			}
 		})
-	}() // listen in bg, non-blocking the main GUI thread
+	}() // Listen in background, non-blocking the main GUI thread
 
 	ico, err := walk.NewIconFromResourceId(2) // icon id from manifest
 	if err != nil {
