@@ -40,7 +40,7 @@ First, install Go.
 Then install all dependencies, do:
 ```cmd
 go install
-staticcheck
+
 go test
 ```
 Then run
